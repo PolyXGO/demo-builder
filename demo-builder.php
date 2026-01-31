@@ -81,10 +81,24 @@ spl_autoload_register(function ($class) {
         return;
     }
     
+    // Check includes/hooks directory
+    $hooks_path = DEMO_BUILDER_PLUGIN_DIR . 'includes/hooks/' . $class_file . '.php';
+    if (file_exists($hooks_path)) {
+        require_once $hooks_path;
+        return;
+    }
+    
     // Check admin directory
     $admin_path = DEMO_BUILDER_PLUGIN_DIR . 'admin/' . $class_file . '.php';
     if (file_exists($admin_path)) {
         require_once $admin_path;
+        return;
+    }
+    
+    // Check public directory
+    $public_path = DEMO_BUILDER_PLUGIN_DIR . 'public/' . $class_file . '.php';
+    if (file_exists($public_path)) {
+        require_once $public_path;
         return;
     }
 });
@@ -96,6 +110,16 @@ function demo_builder_init() {
     // Initialize main plugin class
     if (class_exists('Demo_Builder_Core')) {
         Demo_Builder_Core::get_instance();
+    }
+    
+    // Initialize Scheduled Hooks (for cron)
+    if (class_exists('Demo_Builder_Scheduled_Hooks')) {
+        Demo_Builder_Scheduled_Hooks::get_instance();
+    }
+    
+    // Initialize Countdown Timer
+    if (class_exists('Demo_Builder_Countdown')) {
+        Demo_Builder_Countdown::get_instance();
     }
 }
 add_action('plugins_loaded', 'demo_builder_init', 20);
@@ -119,3 +143,13 @@ function demo_builder_admin_init() {
     }
 }
 add_action('admin_init', 'demo_builder_admin_init');
+
+/**
+ * Frontend Init
+ */
+function demo_builder_frontend_init() {
+    if (!is_admin() && class_exists('Demo_Builder_Public')) {
+        Demo_Builder_Public::get_instance();
+    }
+}
+add_action('init', 'demo_builder_frontend_init', 10);
