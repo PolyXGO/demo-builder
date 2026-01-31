@@ -132,19 +132,18 @@ class Demo_Builder_Admin {
         }
         
         $version = DEMO_BUILDER_VERSION;
-        $assets_url = DEMO_BUILDER_PLUGIN_URL . 'assets/';
         
-        // Libraries
+        // Libraries (Copied to dist, but maintained in lib/ subfolder)
         wp_enqueue_style(
             'sweetalert2',
-            $assets_url . 'lib/sweetalert2/sweetalert2.min.css',
+            $this->get_asset_url('lib/sweetalert2/sweetalert2.min.css'),
             [],
             '11.0.0'
         );
         
         wp_enqueue_script(
             'sweetalert2',
-            $assets_url . 'lib/sweetalert2/sweetalert2.min.js',
+            $this->get_asset_url('lib/sweetalert2/sweetalert2.min.js'),
             [],
             '11.0.0',
             true
@@ -152,7 +151,7 @@ class Demo_Builder_Admin {
         
         wp_enqueue_script(
             'vue',
-            $assets_url . 'lib/vue/vue.global.prod.js',
+            $this->get_asset_url('lib/vue/vue.global.prod.js'),
             [],
             '3.4.27',
             true
@@ -161,7 +160,7 @@ class Demo_Builder_Admin {
         // Plugin styles
         wp_enqueue_style(
             'demo-builder-admin',
-            $assets_url . 'css/admin.css',
+            $this->get_asset_url('css/admin.css'),
             ['sweetalert2'],
             $version
         );
@@ -169,7 +168,7 @@ class Demo_Builder_Admin {
         // Plugin scripts
         wp_enqueue_script(
             'demo-builder-admin',
-            $assets_url . 'js/admin/common.js',
+            $this->get_asset_url('js/admin/common.js'),
             ['jquery', 'sweetalert2', 'vue'],
             $version,
             true
@@ -188,9 +187,17 @@ class Demo_Builder_Admin {
         
         if ($page === self::MENU_SLUG . '-backup') {
             wp_enqueue_script(
+                'demo-builder-upload-chunked',
+                $this->get_asset_url('js/admin/upload-chunked.js'),
+                ['jquery'],
+                $version,
+                true
+            );
+            
+            wp_enqueue_script(
                 'demo-builder-backup',
-                $assets_url . 'js/admin/backup-restore.js',
-                ['demo-builder-admin'],
+                $this->get_asset_url('js/admin/backup-restore.js'),
+                ['demo-builder-admin', 'demo-builder-upload-chunked'],
                 $version,
                 true
             );
@@ -199,7 +206,7 @@ class Demo_Builder_Admin {
         if ($page === self::MENU_SLUG . '-accounts') {
             wp_enqueue_script(
                 'demo-builder-accounts',
-                $assets_url . 'js/admin/demo-accounts.js',
+                $this->get_asset_url('js/admin/demo-accounts.js'),
                 ['demo-builder-admin'],
                 $version,
                 true
@@ -209,12 +216,39 @@ class Demo_Builder_Admin {
         if ($page === self::MENU_SLUG . '-settings') {
             wp_enqueue_script(
                 'demo-builder-settings',
-                $assets_url . 'js/admin/settings.js',
+                $this->get_asset_url('js/admin/settings.js'),
                 ['demo-builder-admin'],
                 $version,
                 true
             );
         }
+    }
+
+    /**
+     * Get asset URL, prioritizing dist/ version if it exists
+     *
+     * @param string $path Relative path from assets/
+     * @return string
+     */
+    private function get_asset_url($path) {
+        $is_lib = strpos($path, 'lib/') === 0;
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        
+        // If it's a plugin asset (not lib) and doesn't already have .min., try to find minified version in dist
+        if (!$is_lib && ($ext === 'js' || $ext === 'css') && strpos($path, '.min.') === false) {
+            $min_path = str_replace(".{$ext}", ".min.{$ext}", $path);
+            if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $min_path)) {
+                return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $min_path;
+            }
+        }
+        
+        // Check if dist/ version exists at all
+        if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $path)) {
+            return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $path;
+        }
+        
+        // Fallback to original assets/
+        return DEMO_BUILDER_PLUGIN_URL . 'assets/' . $path;
     }
 
     /**

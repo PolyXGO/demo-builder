@@ -114,7 +114,7 @@ class Demo_Builder_Login_Form {
         
         wp_enqueue_script(
             'demo-builder-login',
-            DEMO_BUILDER_PLUGIN_URL . 'assets/js/frontend/login-form.js',
+            $this->get_asset_url('js/frontend/login-form.js'),
             ['jquery'],
             DEMO_BUILDER_VERSION,
             true
@@ -131,6 +131,33 @@ class Demo_Builder_Login_Form {
         
         // Add inline styles
         $this->add_login_styles();
+    }
+
+    /**
+     * Get asset URL, prioritizing dist/ version if it exists
+     *
+     * @param string $path Relative path from assets/
+     * @return string
+     */
+    private function get_asset_url($path) {
+        $is_lib = strpos($path, 'lib/') === 0;
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        
+        // If it's a plugin asset (not lib) and doesn't already have .min., try to find minified version in dist
+        if (!$is_lib && ($ext === 'js' || $ext === 'css') && strpos($path, '.min.') === false) {
+            $min_path = str_replace(".{$ext}", ".min.{$ext}", $path);
+            if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $min_path)) {
+                return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $min_path;
+            }
+        }
+        
+        // Check if dist/ version exists at all
+        if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $path)) {
+            return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $path;
+        }
+        
+        // Fallback to original assets/
+        return DEMO_BUILDER_PLUGIN_URL . 'assets/' . $path;
     }
 
     /**

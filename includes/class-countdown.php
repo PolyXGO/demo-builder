@@ -134,7 +134,7 @@ class Demo_Builder_Countdown {
         
         wp_enqueue_script(
             'demo-builder-countdown',
-            DEMO_BUILDER_PLUGIN_URL . 'assets/js/admin/countdown-timer.js',
+            $this->get_asset_url('js/admin/countdown-timer.js'),
             ['jquery'],
             DEMO_BUILDER_VERSION,
             true
@@ -171,7 +171,7 @@ class Demo_Builder_Countdown {
         
         wp_enqueue_script(
             'demo-builder-countdown-frontend',
-            DEMO_BUILDER_PLUGIN_URL . 'assets/js/frontend/countdown-timer.js',
+            $this->get_asset_url('js/frontend/countdown-timer.js'),
             ['jquery'],
             DEMO_BUILDER_VERSION,
             true
@@ -191,6 +191,33 @@ class Demo_Builder_Countdown {
         
         // Add inline styles
         $this->add_countdown_styles($countdown_settings);
+    }
+
+    /**
+     * Get asset URL, prioritizing dist/ version if it exists
+     *
+     * @param string $path Relative path from assets/
+     * @return string
+     */
+    private function get_asset_url($path) {
+        $is_lib = strpos($path, 'lib/') === 0;
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        
+        // If it's a plugin asset (not lib) and doesn't already have .min., try to find minified version in dist
+        if (!$is_lib && ($ext === 'js' || $ext === 'css') && strpos($path, '.min.') === false) {
+            $min_path = str_replace(".{$ext}", ".min.{$ext}", $path);
+            if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $min_path)) {
+                return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $min_path;
+            }
+        }
+        
+        // Check if dist/ version exists at all
+        if (file_exists(DEMO_BUILDER_PLUGIN_DIR . 'dist/assets/' . $path)) {
+            return DEMO_BUILDER_PLUGIN_URL . 'dist/assets/' . $path;
+        }
+        
+        // Fallback to original assets/
+        return DEMO_BUILDER_PLUGIN_URL . 'assets/' . $path;
     }
 
     /**
