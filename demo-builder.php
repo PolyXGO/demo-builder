@@ -107,5 +107,15 @@ function demo_builder_admin_init() {
     if (is_admin() && class_exists('Demo_Builder_Admin')) {
         Demo_Builder_Admin::get_instance();
     }
+    
+    // Initialize Backup class
+    if (is_admin() && class_exists('Demo_Builder_Backup')) {
+        Demo_Builder_Backup::get_instance();
+    }
+    
+    // Initialize Restore class
+    if (is_admin() && class_exists('Demo_Builder_Restore')) {
+        Demo_Builder_Restore::get_instance();
+    }
 }
 add_action('admin_init', 'demo_builder_admin_init');

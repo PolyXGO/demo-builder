@@ -1,6 +1,6 @@
 <?php
 /**
- * Backup & Restore View
+ * Backup & Restore View (Enhanced)
  *
  * @package DemoBuilder
  */
@@ -16,6 +16,17 @@ global $wpdb;
 // Get backups
 $backups_table = $wpdb->prefix . 'demobuilder_backups';
 $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_at DESC LIMIT 50");
+
+// Get directory sizes (will be loaded via AJAX for performance)
+$default_sizes = [
+    'uploads' => ['bytes' => 0, 'formatted' => '...'],
+    'themes' => ['bytes' => 0, 'formatted' => '...'],
+    'plugins' => ['bytes' => 0, 'formatted' => '...'],
+    'database' => ['bytes' => 0, 'formatted' => '...'],
+];
+
+// Get next restore time
+$next_restore = wp_next_scheduled('demo_builder_auto_restore');
 ?>
 
 <div class="wrap db-wrap">
@@ -40,9 +51,9 @@ $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_a
                         type="text" 
                         v-model="backupName"
                         class="db-input"
-                        placeholder="<?php esc_attr_e('my-backup-2026-01-31', 'demo-builder'); ?>"
-                        data-placeholder="<?php esc_attr_e('my-backup-2026-01-31', 'demo-builder'); ?>"
+                        :placeholder="defaultBackupName"
                     />
+                    <p class="db-form-hint"><?php esc_html_e('Leave empty to auto-generate based on date', 'demo-builder'); ?></p>
                 </div>
 
                 <div class="db-form-group">
@@ -75,22 +86,145 @@ $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_a
                     </div>
                 </div>
 
+                <!-- Directory Selection (for full/files backup) -->
+                <div class="db-form-group" v-show="backupType !== 'database'">
+                    <label class="db-label"><?php esc_html_e('Directories to Backup', 'demo-builder'); ?></label>
+                    <div class="db-checkbox-group">
+                        <label class="db-toggle">
+                            <input type="checkbox" v-model="directories.uploads" />
+                            <span class="db-toggle-slider"></span>
+                            <span class="db-toggle-label">
+                                wp-content/uploads/ 
+                                <span class="db-badge db-badge--info">{{ sizes.uploads.formatted }}</span>
+                            </span>
+                        </label>
+                        <label class="db-toggle">
+                            <input type="checkbox" v-model="directories.themes" />
+                            <span class="db-toggle-slider"></span>
+                            <span class="db-toggle-label">
+                                wp-content/themes/
+                                <span class="db-badge db-badge--info">{{ sizes.themes.formatted }}</span>
+                            </span>
+                        </label>
+                        <label class="db-toggle">
+                            <input type="checkbox" v-model="directories.plugins" />
+                            <span class="db-toggle-slider"></span>
+                            <span class="db-toggle-label">
+                                wp-content/plugins/
+                                <span class="db-badge db-badge--info">{{ sizes.plugins.formatted }}</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Exclusion Options Accordion -->
+                <div class="db-form-group">
+                    <details class="db-accordion">
+                        <summary class="db-accordion-header">
+                            <span class="dashicons dashicons-filter"></span>
+                            <?php esc_html_e('Exclusion Options', 'demo-builder'); ?>
+                        </summary>
+                        <div class="db-accordion-content">
+                            <!-- Database Exclusions -->
+                            <div class="db-form-section" v-show="backupType !== 'files'">
+                                <h4 class="db-form-section-title"><?php esc_html_e('Database Exclusions', 'demo-builder'); ?></h4>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.revisions" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude post revisions', 'demo-builder'); ?></span>
+                                </label>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.spamComments" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude spam comments', 'demo-builder'); ?></span>
+                                </label>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.transients" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude transients', 'demo-builder'); ?></span>
+                                </label>
+                            </div>
+                            
+                            <!-- File Exclusions -->
+                            <div class="db-form-section" v-show="backupType !== 'database'">
+                                <h4 class="db-form-section-title"><?php esc_html_e('File Exclusions', 'demo-builder'); ?></h4>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.inactivePlugins" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude inactive plugins', 'demo-builder'); ?></span>
+                                </label>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.inactiveThemes" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude inactive themes', 'demo-builder'); ?></span>
+                                </label>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.cacheFiles" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude cache directories', 'demo-builder'); ?></span>
+                                </label>
+                                <label class="db-toggle">
+                                    <input type="checkbox" v-model="exclusions.logFiles" />
+                                    <span class="db-toggle-slider"></span>
+                                    <span class="db-toggle-label"><?php esc_html_e('Exclude log files (*.log)', 'demo-builder'); ?></span>
+                                </label>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
                 <div class="db-form-actions">
                     <button 
                         type="button" 
                         class="db-btn db-btn--primary"
                         @click="createBackup"
                         :disabled="isCreating"
-                        data-popup-title="<?php esc_attr_e('Create Backup', 'demo-builder'); ?>"
-                        data-popup-text="<?php esc_attr_e('Are you sure you want to create a new backup?', 'demo-builder'); ?>"
-                        data-popup-confirm="<?php esc_attr_e('Yes, create backup', 'demo-builder'); ?>"
-                        data-popup-cancel="<?php esc_attr_e('Cancel', 'demo-builder'); ?>"
-                        data-success-message="<?php esc_attr_e('Backup created successfully!', 'demo-builder'); ?>"
-                        data-error-message="<?php esc_attr_e('Failed to create backup.', 'demo-builder'); ?>"
                     >
                         <span class="dashicons dashicons-database-add"></span>
-                        {{ isCreating ? '<?php esc_attr_e('Creating...', 'demo-builder'); ?>' : '<?php esc_attr_e('Create Backup', 'demo-builder'); ?>' }}
+                        <span v-if="isCreating"><?php esc_html_e('Creating...', 'demo-builder'); ?></span>
+                        <span v-else><?php esc_html_e('Create Backup', 'demo-builder'); ?></span>
                     </button>
+                    <span class="db-form-hint" v-if="estimatedSize">
+                        <?php esc_html_e('Estimated size:', 'demo-builder'); ?> {{ estimatedSize }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Restore Settings -->
+        <div class="db-section">
+            <div class="db-section-header">
+                <h2 class="db-section-title"><?php esc_html_e('Auto Restore', 'demo-builder'); ?></h2>
+                <span class="db-badge db-badge--info" v-if="nextRestoreTime">
+                    <?php esc_html_e('Next:', 'demo-builder'); ?> {{ nextRestoreTime }}
+                </span>
+            </div>
+            
+            <div class="db-card">
+                <label class="db-toggle">
+                    <input type="checkbox" v-model="autoRestore.enabled" @change="saveAutoRestoreSettings" />
+                    <span class="db-toggle-slider"></span>
+                    <span class="db-toggle-label"><?php esc_html_e('Enable Auto Restore', 'demo-builder'); ?></span>
+                </label>
+                
+                <div class="db-form-group" v-show="autoRestore.enabled">
+                    <label class="db-label"><?php esc_html_e('Restore Interval', 'demo-builder'); ?></label>
+                    <select v-model="autoRestore.interval" class="db-select" @change="saveAutoRestoreSettings">
+                        <option value="hourly"><?php esc_html_e('Every Hour', 'demo-builder'); ?></option>
+                        <option value="twicedaily"><?php esc_html_e('Twice Daily', 'demo-builder'); ?></option>
+                        <option value="daily"><?php esc_html_e('Daily', 'demo-builder'); ?></option>
+                        <option value="weekly"><?php esc_html_e('Weekly', 'demo-builder'); ?></option>
+                    </select>
+                </div>
+                
+                <div class="db-form-group" v-show="autoRestore.enabled && backups.length > 0">
+                    <label class="db-label"><?php esc_html_e('Backup to Restore', 'demo-builder'); ?></label>
+                    <select v-model="autoRestore.backupId" class="db-select" @change="saveAutoRestoreSettings">
+                        <option value=""><?php esc_html_e('Latest backup', 'demo-builder'); ?></option>
+                        <option v-for="backup in backups" :key="backup.id" :value="backup.id">
+                            {{ backup.name }} ({{ formatDate(backup.created_at) }})
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -141,26 +275,21 @@ $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_a
                                 <button 
                                     class="db-btn db-btn--sm db-btn--secondary"
                                     @click="restoreBackup(backup)"
-                                    :data-popup-title="'<?php esc_attr_e('Restore Backup', 'demo-builder'); ?>'"
-                                    :data-popup-text="'<?php esc_attr_e('Are you sure you want to restore this backup? Current data will be replaced.', 'demo-builder'); ?>'"
-                                    :data-popup-confirm="'<?php esc_attr_e('Yes, restore', 'demo-builder'); ?>'"
-                                    :data-popup-cancel="'<?php esc_attr_e('Cancel', 'demo-builder'); ?>'"
+                                    :title="'<?php esc_attr_e('Restore', 'demo-builder'); ?>'"
                                 >
                                     <span class="dashicons dashicons-backup"></span>
                                 </button>
                                 <button 
                                     class="db-btn db-btn--sm db-btn--info"
                                     @click="downloadBackup(backup)"
+                                    :title="'<?php esc_attr_e('Download', 'demo-builder'); ?>'"
                                 >
                                     <span class="dashicons dashicons-download"></span>
                                 </button>
                                 <button 
                                     class="db-btn db-btn--sm db-btn--danger"
                                     @click="deleteBackup(backup)"
-                                    :data-popup-title="'<?php esc_attr_e('Delete Backup', 'demo-builder'); ?>'"
-                                    :data-popup-text="'<?php esc_attr_e('Are you sure you want to delete this backup?', 'demo-builder'); ?>'"
-                                    :data-popup-confirm="'<?php esc_attr_e('Yes, delete', 'demo-builder'); ?>'"
-                                    :data-popup-cancel="'<?php esc_attr_e('Cancel', 'demo-builder'); ?>'"
+                                    :title="'<?php esc_attr_e('Delete', 'demo-builder'); ?>'"
                                 >
                                     <span class="dashicons dashicons-trash"></span>
                                 </button>
@@ -178,8 +307,20 @@ $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_a
             </div>
             
             <div class="db-card">
-                <div class="db-upload-zone" @dragover.prevent @drop.prevent="handleDrop">
-                    <input type="file" id="backup-upload" accept=".zip,.sql" @change="handleFileSelect" style="display: none;" />
+                <div 
+                    class="db-upload-zone" 
+                    @dragover.prevent="dragOver = true"
+                    @dragleave="dragOver = false"
+                    @drop.prevent="handleDrop"
+                    :class="{ 'db-upload-zone--active': dragOver }"
+                >
+                    <input 
+                        type="file" 
+                        id="backup-upload" 
+                        accept=".zip,.sql" 
+                        @change="handleFileSelect" 
+                        style="display: none;" 
+                    />
                     <label for="backup-upload" class="db-upload-label">
                         <span class="dashicons dashicons-upload"></span>
                         <span><?php esc_html_e('Drag & drop backup file here or click to select', 'demo-builder'); ?></span>
@@ -199,7 +340,52 @@ $backups = $wpdb->get_results("SELECT * FROM {$backups_table} ORDER BY created_a
     </div>
 </div>
 
+<style>
+.db-accordion {
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius);
+    overflow: hidden;
+}
+
+.db-accordion-header {
+    padding: var(--db-space-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-sm);
+    font-weight: 500;
+    background: var(--db-bg-alt);
+}
+
+.db-accordion-header:hover {
+    background: var(--db-primary-light);
+}
+
+.db-accordion-content {
+    padding: var(--db-space-lg);
+    border-top: 1px solid var(--db-border);
+}
+
+.db-accordion-content .db-toggle {
+    margin-bottom: var(--db-space-sm);
+}
+
+.db-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--db-space-md);
+}
+
+.db-upload-zone--active {
+    border-color: var(--db-primary);
+    background: var(--db-primary-light);
+}
+</style>
+
 <script>
 // Initial data from PHP
 window.demoBuilderBackups = <?php echo wp_json_encode($backups); ?>;
+window.demoBuilderSizes = <?php echo wp_json_encode($default_sizes); ?>;
+window.demoBuilderNextRestore = <?php echo $next_restore ? intval($next_restore) : 'null'; ?>;
+window.demoBuilderSettings = <?php echo wp_json_encode($settings); ?>;
 </script>
