@@ -138,3 +138,31 @@ function demo_builder_init() {
     }
 }
 add_action('init', 'demo_builder_init', 5);
+
+/**
+ * Filter directories to ignore for WordPress Plugin Check (PCP)
+ */
+add_filter('wp_plugin_check_ignore_directories', function ($dirs) {
+    $custom_excludes = ['heraspec', 'documentations', 'tests', 'dist'];
+    return array_unique(array_merge($dirs, $custom_excludes));
+});
+
+/**
+ * Filter files to ignore for WordPress Plugin Check (PCP)
+ */
+add_filter('wp_plugin_check_ignore_files', function ($files) {
+    // Dynamically find all .sh and .md files in directory
+    $excluded_pattern_files = glob(plugin_dir_path(__FILE__) . '{*.sh,*.md,.gitignore}', GLOB_BRACE);
+    $custom_excludes = $excluded_pattern_files ? array_map('basename', $excluded_pattern_files) : [];
+
+    // Add specific manual excludes and system files
+    $custom_excludes = array_merge($custom_excludes, [
+        '.DS_Store',
+        'Thumbs.db',
+        'desktop.ini',
+        'error_log',
+        '.gitignore',
+    ]);
+    
+    return array_unique(array_merge($files, $custom_excludes));
+});

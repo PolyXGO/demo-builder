@@ -1,3 +1,9 @@
+<?php
+// Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
