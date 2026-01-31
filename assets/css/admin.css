@@ -812,6 +812,109 @@
 }
 
 /* ==========================================================================
+   Modal
+   ========================================================================== */
+.db-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: var(--db-space-lg);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.db-modal-content {
+    background: var(--db-white);
+    border-radius: var(--db-radius-lg);
+    box-shadow: var(--db-shadow-lg);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.db-modal-content--sm {
+    max-width: 400px;
+}
+
+.db-modal-content--lg {
+    max-width: 700px;
+}
+
+.db-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--db-space-lg);
+    border-bottom: 1px solid var(--db-border);
+}
+
+.db-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--db-text);
+}
+
+.db-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--db-text-muted);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--db-radius-sm);
+    transition: var(--db-transition);
+}
+
+.db-modal-close:hover {
+    background: var(--db-bg-alt);
+    color: var(--db-text);
+}
+
+.db-modal-body {
+    padding: var(--db-space-lg);
+}
+
+.db-modal-footer {
+    display: flex;
+    gap: var(--db-space-md);
+    justify-content: flex-start;
+    padding: var(--db-space-lg);
+    border-top: 1px solid var(--db-border);
+    background: var(--db-bg-alt);
+    border-radius: 0 0 var(--db-radius-lg) var(--db-radius-lg);
+}
+
+/* ==========================================================================
    Info Table
    ========================================================================== */
 .db-info-table table {
