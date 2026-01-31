@@ -137,6 +137,7 @@ module.exports = [
             minimizer: [
                 new TerserPlugin({
                     test: /\.js$/,
+                    exclude: /assets\/lib\//,
                     extractComments: !is_minified_js,
                     terserOptions: {
                         compress: {
