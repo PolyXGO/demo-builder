@@ -117,6 +117,11 @@ function demo_builder_init() {
         Demo_Builder_Scheduled_Hooks::get_instance();
     }
     
+    // Initialize Permission Hooks (for demo restrictions)
+    if (class_exists('Demo_Builder_Permission_Hooks')) {
+        Demo_Builder_Permission_Hooks::get_instance();
+    }
+    
     // Initialize Countdown Timer
     if (class_exists('Demo_Builder_Countdown')) {
         Demo_Builder_Countdown::get_instance();
