@@ -1,0 +1,22 @@
+{
+  "name": "demo-builder",
+  "version": "1.0.0",
+  "description": "Demo Builder WordPress Plugin",
+  "scripts": {
+    "dev": "tailwindcss -i ./assets/src/admin.css -o ./assets/css/admin.css --watch",
+    "build": "tailwindcss -i ./assets/src/admin.css -o ./assets/css/admin.min.css --minify",
+    "build:all": "npm run build && npm run copy:libs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "backup",
+    "restore",
+    "demo"
+  ],
+  "author": "PolyXGO",
+  "license": "GPL-2.0-or-later"
+}

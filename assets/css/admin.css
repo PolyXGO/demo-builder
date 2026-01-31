@@ -1,0 +1,877 @@
+/**
+ * Demo Builder - Admin Styles
+ * 
+ * Pastel theme with modern UI components
+ * 
+ * @package DemoBuilder
+ */
+
+/* ==========================================================================
+   CSS Variables - Pastel Theme
+   ========================================================================== */
+:root {
+    /* Primary Colors */
+    --db-primary: #A5B4FC;
+    --db-primary-hover: #818CF8;
+    --db-primary-light: #E0E7FF;
+    
+    /* Secondary Colors */
+    --db-secondary: #C4B5FD;
+    --db-secondary-hover: #A78BFA;
+    --db-secondary-light: #EDE9FE;
+    
+    /* Status Colors */
+    --db-success: #86EFAC;
+    --db-success-hover: #4ADE80;
+    --db-success-light: #DCFCE7;
+    
+    --db-warning: #FDE68A;
+    --db-warning-hover: #FBBF24;
+    --db-warning-light: #FEF3C7;
+    
+    --db-danger: #FCA5A5;
+    --db-danger-hover: #F87171;
+    --db-danger-light: #FEE2E2;
+    
+    --db-info: #7DD3FC;
+    --db-info-hover: #38BDF8;
+    --db-info-light: #E0F2FE;
+    
+    /* Neutral Colors */
+    --db-bg: #F8FAFC;
+    --db-bg-alt: #F1F5F9;
+    --db-border: #E2E8F0;
+    --db-text: #334155;
+    --db-text-muted: #64748B;
+    --db-text-light: #94A3B8;
+    --db-white: #FFFFFF;
+    
+    /* Shadows */
+    --db-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --db-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --db-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Spacing */
+    --db-space-xs: 4px;
+    --db-space-sm: 8px;
+    --db-space-md: 16px;
+    --db-space-lg: 24px;
+    --db-space-xl: 32px;
+    
+    /* Border Radius */
+    --db-radius-sm: 6px;
+    --db-radius: 12px;
+    --db-radius-lg: 16px;
+    --db-radius-full: 9999px;
+    
+    /* Transitions */
+    --db-transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+.db-wrap {
+    margin: 0;
+    padding: var(--db-space-lg);
+    background: var(--db-bg);
+    min-height: calc(100vh - 32px);
+}
+
+.db-wrap * {
+    box-sizing: border-box;
+}
+
+[v-cloak] {
+    display: none !important;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.db-header {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-md);
+    margin-bottom: var(--db-space-xl);
+}
+
+.db-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--db-text);
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-sm);
+    margin: 0;
+}
+
+.db-title .dashicons {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--db-primary-hover);
+}
+
+.db-version {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    background: var(--db-primary-light);
+    color: var(--db-primary-hover);
+    border-radius: var(--db-radius-full);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Stats Grid
+   ========================================================================== */
+.db-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--db-space-lg);
+    margin-bottom: var(--db-space-xl);
+}
+
+.db-stats-grid--sm {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-bottom: var(--db-space-lg);
+}
+
+.db-stat-card {
+    background: var(--db-white);
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-md);
+    box-shadow: var(--db-shadow);
+    transition: var(--db-transition);
+}
+
+.db-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--db-shadow-lg);
+}
+
+.db-stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--db-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.db-stat-card--primary .db-stat-icon {
+    background: var(--db-primary-light);
+    color: var(--db-primary-hover);
+}
+
+.db-stat-card--secondary .db-stat-icon {
+    background: var(--db-secondary-light);
+    color: var(--db-secondary-hover);
+}
+
+.db-stat-card--success .db-stat-icon {
+    background: var(--db-success-light);
+    color: var(--db-success-hover);
+}
+
+.db-stat-card--info .db-stat-icon {
+    background: var(--db-info-light);
+    color: var(--db-info-hover);
+}
+
+.db-stat-icon .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.db-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--db-text);
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-sm);
+}
+
+.db-stat-label {
+    font-size: 0.875rem;
+    color: var(--db-text-muted);
+    margin-top: var(--db-space-xs);
+}
+
+/* ==========================================================================
+   Sections
+   ========================================================================== */
+.db-section {
+    background: var(--db-white);
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-lg);
+    margin-bottom: var(--db-space-lg);
+    box-shadow: var(--db-shadow);
+}
+
+.db-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--db-space-lg);
+}
+
+.db-section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--db-text);
+    margin: 0;
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+.db-card {
+    background: var(--db-bg-alt);
+    border-radius: var(--db-radius);
+    padding: var(--db-space-lg);
+}
+
+/* ==========================================================================
+   Actions Grid
+   ========================================================================== */
+.db-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--db-space-md);
+}
+
+.db-action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--db-space-sm);
+    padding: var(--db-space-lg);
+    background: var(--db-bg-alt);
+    border-radius: var(--db-radius);
+    text-decoration: none;
+    color: var(--db-text);
+    transition: var(--db-transition);
+    border: 2px solid transparent;
+}
+
+.db-action-card:hover {
+    background: var(--db-primary-light);
+    border-color: var(--db-primary);
+    transform: translateY(-2px);
+}
+
+.db-action-card .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--db-primary-hover);
+}
+
+/* ==========================================================================
+   Tabs
+   ========================================================================== */
+.db-tabs {
+    display: flex;
+    gap: var(--db-space-xs);
+    margin-bottom: var(--db-space-lg);
+    border-bottom: 2px solid var(--db-border);
+    padding-bottom: var(--db-space-xs);
+    overflow-x: auto;
+}
+
+.db-tab {
+    padding: var(--db-space-sm) var(--db-space-md);
+    text-decoration: none;
+    color: var(--db-text-muted);
+    font-weight: 500;
+    border-radius: var(--db-radius-sm) var(--db-radius-sm) 0 0;
+    transition: var(--db-transition);
+    white-space: nowrap;
+}
+
+.db-tab:hover {
+    color: var(--db-text);
+    background: var(--db-bg-alt);
+}
+
+.db-tab--active {
+    color: var(--db-primary-hover);
+    background: var(--db-primary-light);
+    position: relative;
+}
+
+.db-tab--active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--db-primary-hover);
+}
+
+.db-tab-content {
+    background: var(--db-white);
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-lg);
+    box-shadow: var(--db-shadow);
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+.db-form-section {
+    margin-bottom: var(--db-space-xl);
+}
+
+.db-form-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--db-text);
+    margin: 0 0 var(--db-space-md) 0;
+    padding-bottom: var(--db-space-sm);
+    border-bottom: 1px solid var(--db-border);
+}
+
+.db-form-group {
+    margin-bottom: var(--db-space-lg);
+}
+
+.db-label {
+    display: block;
+    font-weight: 500;
+    color: var(--db-text);
+    margin-bottom: var(--db-space-sm);
+}
+
+.db-input,
+.db-select,
+.db-textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 14px;
+    font-size: 0.9375rem;
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius-sm);
+    background: var(--db-white);
+    color: var(--db-text);
+    transition: var(--db-transition);
+}
+
+.db-input:focus,
+.db-select:focus,
+.db-textarea:focus {
+    outline: none;
+    border-color: var(--db-primary);
+    box-shadow: 0 0 0 3px var(--db-primary-light);
+}
+
+.db-input--sm {
+    max-width: 150px;
+}
+
+.db-form-hint {
+    font-size: 0.8125rem;
+    color: var(--db-text-muted);
+    margin-top: var(--db-space-xs);
+}
+
+.db-form-actions {
+    display: flex;
+    gap: var(--db-space-md);
+    padding-top: var(--db-space-lg);
+    border-top: 1px solid var(--db-border);
+}
+
+/* Toggle Switch */
+.db-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-md);
+    cursor: pointer;
+}
+
+.db-toggle input {
+    display: none;
+}
+
+.db-toggle-slider {
+    width: 48px;
+    height: 26px;
+    background: var(--db-border);
+    border-radius: var(--db-radius-full);
+    position: relative;
+    transition: var(--db-transition);
+    flex-shrink: 0;
+}
+
+.db-toggle-slider::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: var(--db-white);
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: var(--db-transition);
+    box-shadow: var(--db-shadow-sm);
+}
+
+.db-toggle input:checked + .db-toggle-slider {
+    background: var(--db-primary);
+}
+
+.db-toggle input:checked + .db-toggle-slider::after {
+    left: 25px;
+}
+
+.db-toggle-label {
+    color: var(--db-text);
+    font-weight: 500;
+}
+
+/* Radio Group */
+.db-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--db-space-md);
+}
+
+.db-radio {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--db-space-md);
+    cursor: pointer;
+    padding: var(--db-space-md);
+    background: var(--db-bg-alt);
+    border-radius: var(--db-radius);
+    border: 2px solid transparent;
+    transition: var(--db-transition);
+}
+
+.db-radio:hover {
+    background: var(--db-primary-light);
+}
+
+.db-radio input {
+    display: none;
+}
+
+.db-radio-mark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--db-border);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: var(--db-transition);
+}
+
+.db-radio-mark::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--db-primary-hover);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: var(--db-transition);
+}
+
+.db-radio input:checked + .db-radio-mark {
+    border-color: var(--db-primary-hover);
+}
+
+.db-radio input:checked + .db-radio-mark::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.db-radio-label strong {
+    display: block;
+    color: var(--db-text);
+}
+
+.db-radio-label small {
+    color: var(--db-text-muted);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.db-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--db-space-sm);
+    padding: 10px 20px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--db-radius-sm);
+    cursor: pointer;
+    transition: var(--db-transition);
+    text-decoration: none;
+}
+
+.db-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.db-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.db-btn--primary {
+    background: linear-gradient(135deg, var(--db-primary) 0%, var(--db-primary-hover) 100%);
+    color: var(--db-white);
+}
+
+.db-btn--primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--db-shadow);
+}
+
+.db-btn--secondary {
+    background: var(--db-secondary-light);
+    color: var(--db-secondary-hover);
+}
+
+.db-btn--secondary:hover:not(:disabled) {
+    background: var(--db-secondary);
+    color: var(--db-white);
+}
+
+.db-btn--danger {
+    background: var(--db-danger-light);
+    color: var(--db-danger-hover);
+}
+
+.db-btn--danger:hover:not(:disabled) {
+    background: var(--db-danger);
+    color: var(--db-white);
+}
+
+.db-btn--info {
+    background: var(--db-info-light);
+    color: var(--db-info-hover);
+}
+
+.db-btn--info:hover:not(:disabled) {
+    background: var(--db-info);
+    color: var(--db-white);
+}
+
+.db-btn--sm {
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+}
+
+.db-btn--sm .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+.db-table-wrap {
+    overflow-x: auto;
+}
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.db-table th,
+.db-table td {
+    padding: var(--db-space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--db-border);
+}
+
+.db-table th {
+    font-weight: 600;
+    color: var(--db-text);
+    background: var(--db-bg-alt);
+}
+
+.db-table td {
+    color: var(--db-text);
+    vertical-align: middle;
+}
+
+.db-table tbody tr:hover {
+    background: var(--db-bg-alt);
+}
+
+.db-table-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.db-table-actions .db-btn {
+    margin-left: var(--db-space-xs);
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+.db-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--db-radius-full);
+    text-transform: uppercase;
+}
+
+.db-badge--primary {
+    background: var(--db-primary-light);
+    color: var(--db-primary-hover);
+}
+
+.db-badge--secondary {
+    background: var(--db-secondary-light);
+    color: var(--db-secondary-hover);
+}
+
+.db-badge--success {
+    background: var(--db-success-light);
+    color: var(--db-success-hover);
+}
+
+.db-badge--warning {
+    background: var(--db-warning-light);
+    color: var(--db-warning-hover);
+}
+
+.db-badge--danger {
+    background: var(--db-danger-light);
+    color: var(--db-danger-hover);
+}
+
+.db-badge--info {
+    background: var(--db-info-light);
+    color: var(--db-info-hover);
+}
+
+.db-badge--full { background: var(--db-primary-light); color: var(--db-primary-hover); }
+.db-badge--database { background: var(--db-info-light); color: var(--db-info-hover); }
+.db-badge--files { background: var(--db-secondary-light); color: var(--db-secondary-hover); }
+
+/* ==========================================================================
+   Status Dots
+   ========================================================================== */
+.db-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: var(--db-space-xs);
+}
+
+.db-status-dot--active,
+.db-status-dot--completed,
+.db-status-dot--complete {
+    background: var(--db-success);
+}
+
+.db-status-dot--pending {
+    background: var(--db-warning);
+}
+
+.db-status-dot--failed,
+.db-status-dot--inactive {
+    background: var(--db-danger);
+}
+
+.db-status-dot--processing {
+    background: var(--db-info);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ==========================================================================
+   Toolbar
+   ========================================================================== */
+.db-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--db-space-md);
+    margin-bottom: var(--db-space-lg);
+}
+
+/* ==========================================================================
+   Upload Zone
+   ========================================================================== */
+.db-upload-zone {
+    border: 2px dashed var(--db-border);
+    border-radius: var(--db-radius);
+    padding: var(--db-space-xl);
+    text-align: center;
+    transition: var(--db-transition);
+}
+
+.db-upload-zone:hover {
+    border-color: var(--db-primary);
+    background: var(--db-primary-light);
+}
+
+.db-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--db-space-sm);
+    cursor: pointer;
+    color: var(--db-text-muted);
+}
+
+.db-upload-label .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--db-primary);
+}
+
+/* ==========================================================================
+   Notices
+   ========================================================================== */
+.db-notice {
+    padding: var(--db-space-md);
+    border-radius: var(--db-radius);
+    margin-bottom: var(--db-space-lg);
+}
+
+.db-notice--info {
+    background: var(--db-info-light);
+    border-left: 4px solid var(--db-info);
+}
+
+.db-notice--warning {
+    background: var(--db-warning-light);
+    border-left: 4px solid var(--db-warning);
+}
+
+.db-notice--success {
+    background: var(--db-success-light);
+    border-left: 4px solid var(--db-success);
+}
+
+.db-notice--danger {
+    background: var(--db-danger-light);
+    border-left: 4px solid var(--db-danger);
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.db-text-center { text-align: center; }
+.db-text-muted { color: var(--db-text-muted); }
+.db-text-warning { color: var(--db-warning-hover); }
+.db-text-error { color: var(--db-danger-hover); }
+.db-text-success { color: var(--db-success-hover); }
+
+.db-code {
+    font-family: monospace;
+    font-size: 0.8125rem;
+    padding: 2px 6px;
+    background: var(--db-bg-alt);
+    border-radius: 4px;
+}
+
+.db-sort-handle {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-xs);
+    color: var(--db-text-muted);
+    cursor: move;
+}
+
+.db-sort-handle .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Info Table
+   ========================================================================== */
+.db-info-table table {
+    width: 100%;
+}
+
+.db-info-table td {
+    padding: var(--db-space-md);
+}
+
+.db-info-table td:first-child {
+    width: 200px;
+}
+
+/* ==========================================================================
+   SweetAlert2 Customization
+   ========================================================================== */
+.swal2-popup.db-swal-popup {
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-xl);
+}
+
+.swal2-styled.swal2-confirm {
+    background: linear-gradient(135deg, var(--db-primary) 0%, var(--db-primary-hover) 100%) !important;
+    border-radius: var(--db-radius-sm) !important;
+    padding: 10px 24px !important;
+}
+
+.swal2-styled.swal2-cancel {
+    background: var(--db-bg-alt) !important;
+    color: var(--db-text) !important;
+    border-radius: var(--db-radius-sm) !important;
+    padding: 10px 24px !important;
+}
+
+.swal2-styled.swal2-deny {
+    background: var(--db-danger) !important;
+    border-radius: var(--db-radius-sm) !important;
+}
+
+.swal2-icon.swal2-success {
+    border-color: var(--db-success) !important;
+    color: var(--db-success) !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+    background-color: var(--db-success) !important;
+}
+
+.swal2-icon.swal2-warning {
+    border-color: var(--db-warning) !important;
+    color: var(--db-warning-hover) !important;
+}
+
+.swal2-icon.swal2-error {
+    border-color: var(--db-danger) !important;
+    color: var(--db-danger) !important;
+}
+
+.swal2-icon.swal2-question {
+    border-color: var(--db-info) !important;
+    color: var(--db-info-hover) !important;
+}
