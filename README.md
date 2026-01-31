@@ -2,7 +2,7 @@
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.x+-21759B?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
-[![License](https://img.shields.io/badge/License-GPL_v2+-blue?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 A comprehensive WordPress plugin for creating and managing demo sites with automated backup/restore, demo account management, and cloud storage integration.
 
@@ -96,7 +96,7 @@ Development specifications are located in `/heraspec/`:
 
 ## License
 
-This project is licensed under the GPL v2 or later.
+This project is licensed under the MIT License.
 
 ## Support
 
