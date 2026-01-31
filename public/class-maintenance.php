@@ -256,7 +256,7 @@ class Demo_Builder_Maintenance {
         
         // Get settings
         $title = $this->settings['title'] ?? __('Under Maintenance', 'demo-builder');
-        $description = $this->settings['description'] ?? '';
+        $description = $this->settings['message'] ?? '';
         $logo = $this->settings['logo'] ?? '';
         $background_image = $this->settings['background_image'] ?? '';
         $custom_html = $this->settings['custom_html'] ?? '';
