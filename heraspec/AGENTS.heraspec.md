@@ -123,3 +123,64 @@ SweetAlert2 pastel theme, strict no inline CSS/JS rules, jQuery and Vue.js requi
 > - ✅ SweetAlert2 cho tất cả confirm, alert, modal, popup
 > - ✅ jQuery cho DOM manipulation
 > - ✅ Vue.js 3 cho two-way binding và reactive UI
+
+---
+
+## Progress Tracking Rules
+
+> ⚠️ **MANDATORY:** Follow these rules to maintain accurate progress tracking.
+
+### PROGRESS.md Workflow
+
+**Location:** `/PROGRESS.md` (root of plugin)
+
+**When to Update:**
+1. After completing implementation of each spec
+2. When starting work on a new spec
+3. When context changes (new session/conversation)
+
+### Update Actions
+
+**Before Starting a Spec:**
+```markdown
+| 01 | spec.md | Feature Name | 🔄 In Progress | - | Notes... |
+```
+
+**After Completing a Spec:**
+```markdown
+| 01 | spec.md | Feature Name | ✅ Done | ~XX,000 | Notes... |
+```
+
+**Token Estimation:**
+- Count approximate tokens used during implementation
+- Include planning, coding, testing, and fixes
+- Update Implementation History table
+
+### Context Change Protocol
+
+When starting a new conversation/context:
+1. **Read** `PROGRESS.md` first
+2. **Check** current status of all features
+3. **Continue** from last incomplete spec
+4. **Update** status when resuming work
+
+### Sample Update Commit
+```bash
+git add PROGRESS.md
+git commit -m "Update progress: [SPEC_NAME] completed (~XX,XXX tokens)"
+```
+
+---
+
+## Quick Commands
+
+```bash
+# View current progress
+cat PROGRESS.md
+
+# Update and commit progress
+git add PROGRESS.md && git commit -m "Progress update: [description]"
+
+# Push to GitHub
+git push origin main
+```
