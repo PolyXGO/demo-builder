@@ -479,6 +479,3 @@ class Demo_Builder_Restore {
         return wp_next_scheduled('demo_builder_auto_restore');
     }
 }
-
-// Initialize
-Demo_Builder_Restore::get_instance();

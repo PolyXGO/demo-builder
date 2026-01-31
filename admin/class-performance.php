@@ -657,6 +657,3 @@ class Demo_Builder_Performance {
         wp_send_json_success(['message' => __('Operation cancelled.', 'demo-builder')]);
     }
 }
-
-// Initialize
-Demo_Builder_Performance::get_instance();

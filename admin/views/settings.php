@@ -33,7 +33,7 @@ $tabs = [
         </h1>
     </div>
 
-    <div id="demo-builder-settings" class="db-settings" v-cloak>
+    <div id="demo-builder-settings" class="db-settings">
         <!-- Tabs Navigation -->
         <nav class="db-tabs">
             <?php foreach ($tabs as $tab_id => $tab_label): ?>

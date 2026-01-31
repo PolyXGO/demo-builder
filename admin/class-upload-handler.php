@@ -366,6 +366,3 @@ class Demo_Builder_Upload_Handler {
         }
     }
 }
-
-// Initialize
-Demo_Builder_Upload_Handler::get_instance();

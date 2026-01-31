@@ -530,6 +530,3 @@ class Demo_Builder_Telegram {
         wp_send_json_success(['message' => __('Telegram settings saved!', 'demo-builder')]);
     }
 }
-
-// Initialize
-Demo_Builder_Telegram::get_instance();

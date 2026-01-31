@@ -272,8 +272,3 @@ class Demo_Builder_Login_Form {
         wp_send_json_success(['accounts' => $accounts]);
     }
 }
-
-// Initialize on login page
-add_action('login_init', function() {
-    Demo_Builder_Login_Form::get_instance();
-});

@@ -424,6 +424,3 @@ class Demo_Builder_Countdown {
         wp_send_json_success(['message' => __('Countdown settings saved!', 'demo-builder')]);
     }
 }
-
-// Initialize
-Demo_Builder_Countdown::get_instance();

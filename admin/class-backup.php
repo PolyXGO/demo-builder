@@ -775,6 +775,3 @@ class Demo_Builder_Backup {
         exit;
     }
 }
-
-// Initialize
-Demo_Builder_Backup::get_instance();

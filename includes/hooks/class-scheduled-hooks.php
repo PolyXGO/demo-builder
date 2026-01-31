@@ -471,6 +471,3 @@ class Demo_Builder_Scheduled_Hooks {
         return wp_next_scheduled('demo_builder_auto_restore');
     }
 }
-
-// Initialize
-Demo_Builder_Scheduled_Hooks::get_instance();

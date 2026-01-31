@@ -571,6 +571,3 @@ class Demo_Builder_Permission_Hooks {
         wp_send_json_success(['message' => __('Permissions saved!', 'demo-builder')]);
     }
 }
-
-// Initialize
-Demo_Builder_Permission_Hooks::get_instance();

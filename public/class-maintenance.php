@@ -425,6 +425,3 @@ class Demo_Builder_Maintenance {
         wp_send_json_success(['message' => __('Maintenance settings saved!', 'demo-builder')]);
     }
 }
-
-// Initialize
-Demo_Builder_Maintenance::get_instance();

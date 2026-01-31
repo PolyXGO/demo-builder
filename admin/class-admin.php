@@ -187,17 +187,9 @@ class Demo_Builder_Admin {
         
         if ($page === self::MENU_SLUG . '-backup') {
             wp_enqueue_script(
-                'demo-builder-upload-chunked',
-                $this->get_asset_url('js/admin/upload-chunked.js'),
-                ['jquery'],
-                $version,
-                true
-            );
-            
-            wp_enqueue_script(
                 'demo-builder-backup',
                 $this->get_asset_url('js/admin/backup-restore.js'),
-                ['demo-builder-admin', 'demo-builder-upload-chunked'],
+                ['demo-builder-admin'],
                 $version,
                 true
             );

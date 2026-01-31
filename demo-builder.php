@@ -50,18 +50,6 @@ function demo_builder_deactivate() {
 register_deactivation_hook(__FILE__, 'demo_builder_deactivate');
 
 /**
- * Load Plugin Textdomain
- */
-function demo_builder_load_textdomain() {
-    load_plugin_textdomain(
-        'demo-builder',
-        false,
-        dirname(DEMO_BUILDER_PLUGIN_BASENAME) . '/languages/'
-    );
-}
-add_action('plugins_loaded', 'demo_builder_load_textdomain');
-
-/**
  * Autoloader for Plugin Classes
  */
 spl_autoload_register(function ($class) {
@@ -104,57 +92,49 @@ spl_autoload_register(function ($class) {
 });
 
 /**
- * Initialize Plugin
+ * Load Plugin Textdomain - Must be on init or later for WP 6.7+
+ */
+function demo_builder_load_textdomain() {
+    load_plugin_textdomain(
+        'demo-builder',
+        false,
+        dirname(DEMO_BUILDER_PLUGIN_BASENAME) . '/languages/'
+    );
+}
+add_action('init', 'demo_builder_load_textdomain', 1);
+
+/**
+ * Initialize Plugin - All initialization on init action
  */
 function demo_builder_init() {
     // Initialize main plugin class
-    if (class_exists('Demo_Builder_Core')) {
-        Demo_Builder_Core::get_instance();
-    }
+    Demo_Builder_Core::get_instance();
     
     // Initialize Scheduled Hooks (for cron)
-    if (class_exists('Demo_Builder_Scheduled_Hooks')) {
-        Demo_Builder_Scheduled_Hooks::get_instance();
-    }
+    Demo_Builder_Scheduled_Hooks::get_instance();
     
     // Initialize Permission Hooks (for demo restrictions)
-    if (class_exists('Demo_Builder_Permission_Hooks')) {
-        Demo_Builder_Permission_Hooks::get_instance();
-    }
+    Demo_Builder_Permission_Hooks::get_instance();
     
     // Initialize Countdown Timer
-    if (class_exists('Demo_Builder_Countdown')) {
-        Demo_Builder_Countdown::get_instance();
-    }
-}
-add_action('plugins_loaded', 'demo_builder_init', 20);
-
-/**
- * Admin Init
- */
-function demo_builder_admin_init() {
-    if (is_admin() && class_exists('Demo_Builder_Admin')) {
+    Demo_Builder_Countdown::get_instance();
+    
+    // Initialize Maintenance Mode
+    Demo_Builder_Maintenance::get_instance();
+    
+    // Admin Classes
+    if (is_admin()) {
         Demo_Builder_Admin::get_instance();
-    }
-    
-    // Initialize Backup class
-    if (is_admin() && class_exists('Demo_Builder_Backup')) {
         Demo_Builder_Backup::get_instance();
-    }
-    
-    // Initialize Restore class
-    if (is_admin() && class_exists('Demo_Builder_Restore')) {
         Demo_Builder_Restore::get_instance();
-    }
-}
-add_action('admin_init', 'demo_builder_admin_init');
-
-/**
- * Frontend Init
- */
-function demo_builder_frontend_init() {
-    if (!is_admin() && class_exists('Demo_Builder_Public')) {
+        Demo_Builder_Demo_Accounts::get_instance();
+        Demo_Builder_Performance::get_instance();
+        Demo_Builder_Telegram::get_instance();
+        Demo_Builder_Upload_Handler::get_instance();
+    } else {
+        // Public/Frontend Classes
         Demo_Builder_Public::get_instance();
+        Demo_Builder_Login_Form::get_instance();
     }
 }
-add_action('init', 'demo_builder_frontend_init', 10);
+add_action('init', 'demo_builder_init', 5);

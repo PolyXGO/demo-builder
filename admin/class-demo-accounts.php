@@ -546,6 +546,3 @@ class Demo_Builder_Demo_Accounts {
         wp_send_json_success(['roles' => $result]);
     }
 }
-
-// Initialize
-Demo_Builder_Demo_Accounts::get_instance();

@@ -134,10 +134,3 @@ class Demo_Builder_Public {
         ];
     }
 }
-
-// Initialize on frontend only
-if (!is_admin()) {
-    add_action('init', function() {
-        Demo_Builder_Public::get_instance();
-    }, 5);
-}
