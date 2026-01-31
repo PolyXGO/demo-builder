@@ -907,7 +907,7 @@
 .db-modal-footer {
     display: flex;
     gap: var(--db-space-md);
-    justify-content: flex-start;
+    justify-content: center;
     padding: var(--db-space-lg);
     border-top: 1px solid var(--db-border);
     background: var(--db-bg-alt);
