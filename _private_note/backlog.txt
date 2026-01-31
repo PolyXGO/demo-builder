@@ -1,0 +1,12 @@
+Tham khảo source code phần tính năng backup và restore database trong source /Applications/XAMPP/xamppfiles/htdocs/perfex_crm_340/modules/demo_builder
+
+Sau đó, tổng hợp các tính năng mô tả đề xuất xây dựng 1 plugin WordPress hỗ trợ:
+1. Backup cơ sở dữ liệu WordPress và source code chủ động.
+2. Hỗ trợ restore database và source code chủ động hoặc tự động mỗi khoảng thời gian nhất định như: 30 phút, 60 phút, 120 phút, 1 ngày, 2 ngày, 3 ngày, 1 tuần, 2 tuần, hoặc số giờ tùy chọn, hiển thị dạng dropdownlist hoặc sao cho phù hợp.
+3. Hiển thị thông tin các bản backup và hỗ trợ restore theo bản backup. Trình bày như source tham khảo trên.
+4. Hổ trợ tính năng tạo phần tử thông báo đếm ngược thời gian bản restore sẽ thực hiện (Timer Counter).
+5. Hỗ trợ tạo và generate demoaccount tương tự source tham khảo nhưng theo chuẩn WordPress.
+6. Hỗ trợ các tùy chỉnh phân quyền để hạn chế các quyền cần thiết cho người dùng demoaccount: không cho phép xóa admin supper, không cho phép xóa plugin, demo account, không cho phép active/ deactive plugins, không cho phép thay đổi mật khẩu của tài khoản demo.
+6. Tích hợp cấu hình thông báo notice qua Telegram Bot tương tự module source tham khảo.
+
+Và đề xuất thêm giúp tôi nhưng gì cần thiết để đảm bảo plugin hỗ trợ tạo 1 site demo hoàn chỉnh.
