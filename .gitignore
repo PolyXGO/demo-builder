@@ -18,6 +18,7 @@ $RECYCLE.BIN/
 
 # Dependencies & Build
 node_modules/
+_private_note/
 dist/
 vendor/
 npm-debug.log*
